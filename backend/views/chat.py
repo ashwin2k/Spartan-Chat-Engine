@@ -2,7 +2,6 @@ from fastapi import APIRouter, WebSocket
 from schemas import Message
 from pydantic import ValidationError
 from controllers.chatController import chatCompletion
-from controllers.webSearchController import searchWeb
 from controllers.RAG import RAG
 
 router = APIRouter()
