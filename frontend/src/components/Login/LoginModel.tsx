@@ -4,9 +4,9 @@ import Sheet from '@mui/joy/Sheet';
 import { useContext, useState } from 'react';
 import GoogleButton from 'react-google-button';
 import { signInWithGoogle } from './GoogleLogin';
-import { AlertBox } from './Utils/Alert';
-import { LoginFlow } from '../enums/LoginFlow';
-import { AuthContext } from '../contexts/AuthContext';
+import { AlertBox } from '../Utils/Alert';
+import { LoginFlow } from '../../enums/LoginFlow';
+import { AuthContext } from '../../contexts/AuthContext';
 
 export default function LoginModel() {
     const [loginProgress, setLoginProgress] = useState<number>(0);
@@ -73,22 +73,22 @@ export default function LoginModel() {
                             }
                         }}
                     />
-                    {loginProgress == LoginFlow.POPUP && (
+                    {loginProgress === LoginFlow.POPUP && (
                         <AlertBox
                             text="Continue on the Google popup."
-                            isOpen={loginProgress == LoginFlow.POPUP}
+                            isOpen={loginProgress === LoginFlow.POPUP}
                         />
                     )}
-                    {loginProgress == LoginFlow.SUCCESS && (
+                    {loginProgress === LoginFlow.SUCCESS && (
                         <AlertBox
                             text="Successfully logged In!"
-                            isOpen={loginProgress == LoginFlow.SUCCESS}
+                            isOpen={loginProgress === LoginFlow.SUCCESS}
                         />
                     )}
-                    {loginProgress == LoginFlow.ERROR && (
+                    {loginProgress === LoginFlow.ERROR && (
                         <AlertBox
                             text="Error logging in. Please try again."
-                            isOpen={loginProgress == LoginFlow.ERROR}
+                            isOpen={loginProgress === LoginFlow.ERROR}
                         />
                     )}
                 </div>

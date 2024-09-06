@@ -3,7 +3,7 @@ import {
     faPaperPlane,
     faUpload,
 } from '@fortawesome/free-solid-svg-icons';
-import { useCallback, useContext, useRef, useState } from 'react';
+import { useCallback, useContext, useRef } from 'react';
 import { IChatInputProps } from '../../types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconButton, Textarea } from '@mui/joy';
@@ -106,7 +106,7 @@ export const ChatInput = ({
             {ragContext === RAGContext.FILE && (
                 <AlertBox
                     text="Now using File RAG Context."
-                    isOpen={ragContext == RAGContext.FILE}
+                    isOpen={ragContext === RAGContext.FILE}
                 />
             )}
         </div>

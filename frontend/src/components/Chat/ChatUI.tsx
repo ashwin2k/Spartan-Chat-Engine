@@ -3,7 +3,7 @@ import { ChatConversations } from './ChatConversations';
 import { ChatInput } from './ChatInput';
 import { IChatUIProps } from '../../types';
 import { AuthContext } from '../../contexts/AuthContext';
-import LoginModel from '../LoginModel';
+import LoginModel from '../Login/LoginModel';
 import { FileUploadSideBar } from './FileUploadSideBar';
 import { ChatGreeting } from './ChatGreeting';
 
@@ -15,14 +15,14 @@ export const ChatUI = ({
     onSubmit,
 }: IChatUIProps) => {
     const chatConversationsContainerRef = useRef<HTMLDivElement>(null);
-    const { isLoggedIn, setIsLoggedIn, chatConversations } =
+    const { isLoggedIn, chatConversations } =
         useContext(AuthContext);
     return (
         <div className="flex flex-row w-full overflow-y-hidden">
             <FileUploadSideBar />
             <div className="flex-grow" style={{ height: 'calc(100vh - 68px)' }}>
                 {!isLoggedIn && <LoginModel />}
-                {chatConversations.length == 0 && <ChatGreeting />}
+                {chatConversations.length === 0 && <ChatGreeting />}
 
                 <div
                     ref={chatConversationsContainerRef}

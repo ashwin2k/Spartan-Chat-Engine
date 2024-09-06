@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MessageRole } from '../enums/MessageRole';
 import { Conversations, ILoginResponse, UploadedFiles } from '../types';
 import { ChatUI } from './Chat/ChatUI';

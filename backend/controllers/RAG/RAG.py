@@ -1,5 +1,5 @@
 from schemas import Message, RAGSystemType
-from controllers.webSearchController import searchWeb
+from services.webSearchService import searchWeb
 from llama_index.core import Settings, QueryBundle
 from db import chroma
 from llama_index.core.retrievers import AutoMergingRetriever
@@ -21,6 +21,7 @@ def loadDocuments(prompt: Message):
 
 def getContextAugmentation(prompt: Message, uid: str):
     embed_model = getEmbeddingModel()
+    llm = getLLM()
     documents = []
     vectorIndex = chroma.getVectorStoreIndex(uid)
 
@@ -55,7 +56,8 @@ def getContextAugmentation(prompt: Message, uid: str):
         num_queries=4,  # set this to 1 to disable query generation
         mode="reciprocal_rerank",
         use_async=False,
-        verbose=True,
+        verbose=False,
+        llm=llm,
     )
 
     retrievedNodes = retriever.retrieve(queryBundle)
