@@ -1,7 +1,7 @@
 from duckduckgo_search import DDGS
 from schemas import DDGWebSearchResult
 from llama_index.core import Document
-from typing import List, Callable, AsyncIterator
+from typing import List, Callable
 
 createDocument: Callable[[DDGWebSearchResult], Document] = lambda x: Document(
     text=x["body"], metadata={"title": x["title"], "url": x["href"], "type": "WEB"}

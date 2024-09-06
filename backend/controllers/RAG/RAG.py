@@ -3,7 +3,6 @@ from services.webSearchService import searchWeb
 from llama_index.core import Settings, QueryBundle
 from db import chroma
 from llama_index.core.retrievers import AutoMergingRetriever
-from typing import List
 from utils.llm import getEmbeddingModel, getLLM
 from llama_index.core.retrievers import QueryFusionRetriever
 
