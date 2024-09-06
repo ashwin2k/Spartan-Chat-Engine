@@ -3,6 +3,8 @@ from schemas import Message
 from pydantic import ValidationError
 from controllers.chatController import chatCompletion
 from controllers.RAG import RAG
+from models.mongo import messages
+from services import firebaseAdmin
 
 router = APIRouter()
 
@@ -14,8 +16,8 @@ async def websocket_endpoint(websocket: WebSocket):
         data: dict = await websocket.receive_json()
         try:
             validatedData = Message(**data)
+            relevantDocs = RAG.getContextAugmentation(validatedData)
             asyncIterator = chatCompletion([validatedData], validatedData)
-            RAG.getContextAugmentation(validatedData)
             async for chunk in asyncIterator:
                 await websocket.send_text(chunk.content)
 

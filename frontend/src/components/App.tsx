@@ -1,18 +1,12 @@
 import React, { useCallback, useState } from 'react';
 import { MessageRole } from '../enums/MessageRole';
 import { Conversations } from '../types';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMailReply } from '@fortawesome/free-solid-svg-icons';
 import { ChatUI } from './Chat/ChatUI';
+import { AuthContext } from '../contexts/AuthContext';
 function App() {
     const [isQuerying, setIsQuerying] = useState<boolean>(false);
-    const [chatConversations, setChatConversations] = useState<Conversations>([
-        {
-            id: '1',
-            role: MessageRole.ASSISTANT,
-            message: 'Hi! How can I help you today?',
-        },
-    ]);
+    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+    const [chatConversations, setChatConversations] = useState<Conversations>([]);
 
     const handleSubmit = useCallback((value: string) => {
         setIsQuerying(true);
@@ -40,13 +34,15 @@ function App() {
     }, []);
 
     return (
-        <ChatUI
-            isQuerying={isQuerying}
-            placeholder="Type here to interact with this demo"
-            disabled={isQuerying}
-            conversations={chatConversations}
-            onSubmit={handleSubmit}
-        />
+        <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn,chatConversations,setChatConversations }}>
+            <ChatUI
+                isQuerying={isQuerying}
+                placeholder="Type here to interact with this demo"
+                disabled={isQuerying}
+                conversations={chatConversations}
+                onSubmit={handleSubmit}
+            />
+        </AuthContext.Provider>
     );
 }
 

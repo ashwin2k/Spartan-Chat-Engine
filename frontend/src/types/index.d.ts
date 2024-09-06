@@ -1,3 +1,4 @@
+import { ContentType } from '../enums/ContentType';
 import { MessageRole } from '../enums/MessageRole';
 import { RefObject } from 'react';
 
@@ -11,6 +12,9 @@ export type Message = {
     role: MessageRole;
     message: string;
     userInfo?: User;
+    timestamp?: Date
+    contentType?:[ContentType]
+    email?:string
 };
 export interface IChatUIProps {
     isQuerying: boolean;
@@ -26,7 +30,12 @@ export interface IChatInputProps {
     onSubmit: (value) => void;
     placeholder: string;
 }
-
+export interface ILoginResponse {
+    status:number
+    errors?:[string]
+    message?:string
+    chatHistory?:[Message]
+}
 export interface IChatConversationsProps {
     conversations: Conversations;
     isQuerying: boolean;
@@ -37,4 +46,11 @@ export interface IChatMessageProps {
     message: Message;
 }
 
+export interface AuthContextType {
+    isLoggedIn: boolean;
+    setIsLoggedIn: (boolean) => void;
+    chatConversations: Conversations;
+    setChatConversations: (boolean) => void;
+}
 export type Conversations = Array<Message>;
+

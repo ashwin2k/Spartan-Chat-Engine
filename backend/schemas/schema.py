@@ -1,5 +1,7 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from enum import Enum
+from typing import Optional
+from datetime import datetime
 
 
 class MessageType(str, Enum):
@@ -12,10 +14,17 @@ class UserType(str, Enum):
     AI = "ai"
 
 
+class GoogleLoginSchema(BaseModel):
+    token: str
+    uid: str
+
+
 class Message(BaseModel):
     contentType: MessageType
     userType: UserType
+    timestamp: datetime = Field(default_factory=datetime.utcnow)
     message: str
+    metaData: Optional[GoogleLoginSchema] = {}
 
 
 class DDGWebSearchResult:

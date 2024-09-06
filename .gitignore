@@ -2,3 +2,5 @@
 node_modules
 deasie
 __pycache__
+vectors/*
+serviceAccountKey.json

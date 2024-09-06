@@ -1,6 +1,6 @@
 from schemas import Message
 from controllers.webSearchController import searchWeb
-from llama_index.core import VectorStoreIndex,Settings,QueryBundle
+from llama_index.core import VectorStoreIndex, Settings, QueryBundle
 from db import chroma
 from llama_index.embeddings.ollama import OllamaEmbedding
 from llama_index.core.retrievers import VectorIndexRetriever
@@ -9,6 +9,7 @@ from .ragFusion import generateQueries
 from llama_index.llms.ollama import Ollama
 from llama_index.core.schema import NodeWithScore
 from typing import List
+
 
 def getEmbeddingModel():
     llm = OllamaEmbedding(
@@ -20,28 +21,27 @@ def getEmbeddingModel():
 
     return llm
 
+
 def getLLM():
-    llm = Ollama(
-        model="mistral",
-        request_timeout=60.0
-    )
+    llm = Ollama(model="mistral", request_timeout=60.0)
     Settings.llm = llm
 
     return llm
-    
+
+
 def loadDocuments(prompts: List[str]):
     docs = []
-    for prompt in prompts:   
+    for prompt in prompts:
         webDocuments = searchWeb(prompt)
         docs.extend(webDocuments)
     return docs
 
 
 def getContextAugmentation(prompt: Message):
-    embed_model= getEmbeddingModel()
-    llm= getLLM()
-    additionalQueries = generateQueries(llm,prompt)
-    
+    embed_model = getEmbeddingModel()
+    llm = getLLM()
+    additionalQueries = generateQueries(llm, prompt)
+
     documents = loadDocuments(additionalQueries)
 
     vectorIndex = VectorStoreIndex.from_documents(
@@ -53,6 +53,6 @@ def getContextAugmentation(prompt: Message):
         index=vectorIndex,
         similarity_top_k=10,
     )
-    retrievedNodes:List[NodeWithScore] = retriever.retrieve(queryBundle)
-    reRankedNodes = reRankDocuments(retrievedNodes,queryBundle,llm)
+    retrievedNodes: List[NodeWithScore] = retriever.retrieve(queryBundle)
+    reRankedNodes = reRankDocuments(retrievedNodes, queryBundle, llm)
     return reRankedNodes
