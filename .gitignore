@@ -4,3 +4,4 @@ deasie
 __pycache__
 vectors/*
 serviceAccountKey.json
+.env
