@@ -1,6 +1,7 @@
 import { ContentType } from '../enums/ContentType';
 import { MessageRole } from '../enums/MessageRole';
 import { RefObject } from 'react';
+import { RAGContext } from '../enums/RAGContext';
 
 export type User = {
     firstName: string;
@@ -15,7 +16,7 @@ export type Message = {
     timestamp?: string;
     contentType?: [ContentType];
     email?: string;
-    isCurrentMessage:boolean
+    isCurrentMessage: boolean;
 };
 export interface IChatUIProps {
     isQuerying: boolean;
@@ -64,6 +65,8 @@ export interface AuthContextType {
     setChatConversations: (Conversations) => void;
     socket: WebSocket | undefined;
     setSocket: (WebSocket) => void;
+    ragContext: RAGContext;
+    setRAGContext: (RAGContext) => void;
 }
 export type UploadedFiles = Array<IFileMetaData>;
 

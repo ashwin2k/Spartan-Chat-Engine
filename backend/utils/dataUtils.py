@@ -19,10 +19,11 @@ def serializeMessage(data_list):
             "timestamp": serializeObject(item["timestamp"]),
             "message": item["message"],
             "email": item["email"],
-            "isCurrentMessage":False
+            "isCurrentMessage": False,
         }
         for item in data_list
     ]
+
 
 def serializeUpload(data_list):
     def serializeObject(obj):

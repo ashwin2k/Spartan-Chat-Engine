@@ -14,6 +14,11 @@ class UserType(str, Enum):
     AI = "assistant"
 
 
+class RAGSystemType(str, Enum):
+    WEB = "web"
+    FILE = "doc"
+
+
 class GoogleLoginSchema(BaseModel):
     token: str
     uid: str
@@ -25,6 +30,7 @@ class Message(BaseModel):
     timestamp: datetime = Field(default_factory=datetime.utcnow)
     message: str
     metaData: GoogleLoginSchema
+    rag: RAGSystemType
 
 
 class DDGWebSearchResult:

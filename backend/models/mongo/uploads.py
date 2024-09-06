@@ -15,6 +15,7 @@ class FileUpload(Document):
     text = ListField(StringField(), required=False)
     name = StringField(required=True)
 
-def getAllUploads(email:str):
+
+def getAllUploads(email: str):
     uploads = FileUpload.objects(email=email)
     return [upload.to_mongo().to_dict() for upload in uploads]

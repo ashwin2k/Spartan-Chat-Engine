@@ -1,4 +1,4 @@
-from schemas import Message
+from schemas import Message, RAGSystemType
 from controllers.webSearchController import searchWeb
 from llama_index.core import Settings, QueryBundle
 from db import chroma
@@ -16,33 +16,41 @@ def loadDocuments(prompt: Message):
     if prompt.message.strip() != "":
         webDocuments = searchWeb(prompt.message)
         docs.extend(webDocuments)
-    return []
+    return docs
 
 
 def getContextAugmentation(prompt: Message, uid: str):
     embed_model = getEmbeddingModel()
-    llm = getLLM()
-
-    documents = loadDocuments(prompt)
-
+    documents = []
     vectorIndex = chroma.getVectorStoreIndex(uid)
 
-    vectorIndex = vectorIndex.from_documents(
-        documents,
-        storage_context=chroma.getStorageContext(uid),
-        embed_model=embed_model,
-    )
+    if prompt.rag == RAGSystemType.WEB:
+        documents = loadDocuments(prompt)
+        vectorIndex = vectorIndex.from_documents(
+            documents,
+            embed_model=embed_model,
+        )
+    else:
+        vectorIndex = vectorIndex.from_documents(
+            documents,
+            storage_context=chroma.getStorageContext(uid),
+            embed_model=embed_model,
+        )
 
     queryBundle = QueryBundle(prompt.message)
     baseRetriever = vectorIndex.as_retriever(similarity_top_k=5)
     autoMergingRetriever = AutoMergingRetriever(
         baseRetriever,
         chroma.getStorageContext(uid),
-        verbose=True,
+        verbose=False,
     )
 
+    retreivers = [baseRetriever]
+    if prompt.rag == RAGSystemType.FILE:
+        retreivers.append(autoMergingRetriever)
+
     retriever = QueryFusionRetriever(
-        [baseRetriever, autoMergingRetriever],
+        retreivers,
         similarity_top_k=5,
         num_queries=4,  # set this to 1 to disable query generation
         mode="reciprocal_rerank",

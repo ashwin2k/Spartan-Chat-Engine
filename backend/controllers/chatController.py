@@ -35,11 +35,9 @@ def chatCompletion(
 ) -> AgentChatResponse:
     chatHistory = list(map(getMessage, messageHistory))
     contextMessages = list(map(getContext, relevantDocs))
-    prefixes = [
-        ChatMessage(role="system", content=TS_SYSTEM_PROMPT)
-    ] + contextMessages
+    prefixes = [ChatMessage(role="system", content=TS_SYSTEM_PROMPT)] + contextMessages
     chatEngine = SimpleChatEngine.from_defaults(
-        llm=getLLM(), chat_history=chatHistory, prefix_messages=prefixes,max_tokens=512
+        llm=getLLM(), chat_history=chatHistory, prefix_messages=prefixes, max_tokens=512
     )
 
     return chatEngine.chat(userMessage.message)

@@ -1,17 +1,22 @@
-import { faPaperPlane, faUpload } from '@fortawesome/free-solid-svg-icons';
-import { useCallback, useContext, useRef } from 'react';
+import {
+    faGlobe,
+    faPaperPlane,
+    faUpload,
+} from '@fortawesome/free-solid-svg-icons';
+import { useCallback, useContext, useRef, useState } from 'react';
 import { IChatInputProps } from '../../types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconButton, Textarea } from '@mui/joy';
 import { AuthContext } from '../../contexts/AuthContext';
-
+import { RAGContext } from '../../enums/RAGContext';
+import { AlertBox } from '../Utils/Alert';
 export const ChatInput = ({
     disabled,
     onSubmit,
     placeholder,
 }: IChatInputProps) => {
-    const { uploadedFiles, setUploadedFiles } = useContext(AuthContext);
-
+    const { uploadedFiles, setUploadedFiles, ragContext, setRAGContext } =
+        useContext(AuthContext);
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -51,8 +56,21 @@ export const ChatInput = ({
 
     return (
         <div className="flex justify-center items-center">
+            <IconButton
+                className="absolute"
+                aria-pressed={ragContext === RAGContext.WEB}
+                onClick={() => {
+                    setRAGContext(
+                        ragContext === RAGContext.WEB
+                            ? RAGContext.FILE
+                            : RAGContext.WEB,
+                    );
+                }}
+            >
+                <FontAwesomeIcon icon={faGlobe} />
+            </IconButton>
             <Textarea
-                className={`resize-none w-2/3 mr-1`}
+                className={`resize-none w-2/3 ml-2 mr-1`}
                 onKeyUp={handleEnterKey}
                 minRows={1}
                 slotProps={{ textarea: { ref: textAreaRef } }}
@@ -79,6 +97,18 @@ export const ChatInput = ({
                 style={{ display: 'none' }} // Hide the file input
                 onChange={handleUpload}
             />
+            {ragContext === RAGContext.WEB && (
+                <AlertBox
+                    text="Now using Web RAG Context."
+                    isOpen={ragContext === RAGContext.WEB}
+                />
+            )}
+            {ragContext === RAGContext.FILE && (
+                <AlertBox
+                    text="Now using File RAG Context."
+                    isOpen={ragContext == RAGContext.FILE}
+                />
+            )}
         </div>
     );
 };

@@ -6,25 +6,22 @@ import { MessageRole } from '../../enums/MessageRole';
 import { Avatar } from '@mui/joy';
 import Typed from 'typed.js';
 
-const ChatMessage = ({ message}: IChatMessageProps) => {
+const ChatMessage = ({ message }: IChatMessageProps) => {
     const messageRef = useRef<HTMLDivElement>(null);
     const isBot = message.role !== MessageRole.USER;
     useEffect(() => {
-        if(message.isCurrentMessage){
+        if (message.isCurrentMessage) {
             const typed = new Typed(messageRef.current, {
                 strings: [message.message],
                 typeSpeed: 1,
-                showCursor:false,
-                
-
-              });
-              return () => {
+                showCursor: false,
+            });
+            return () => {
                 // Destroy Typed instance during cleanup to stop animation
                 typed.destroy();
-              };
+            };
         }
-
-      }, []);    
+    }, []);
     return (
         <div className="mt-4">
             <div className="flex items-center">
@@ -47,7 +44,9 @@ const ChatMessage = ({ message}: IChatMessageProps) => {
                 </h4>
             </div>
             <div className="ml-16 mt-4">
-                <div ref={messageRef}>{message.isCurrentMessage?"":message.message}</div>
+                <div ref={messageRef}>
+                    {message.isCurrentMessage ? '' : message.message}
+                </div>
             </div>
         </div>
     );

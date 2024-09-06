@@ -2,8 +2,8 @@ from fastapi import APIRouter, status, Cookie
 from schemas import GoogleLoginSchema
 from fastapi.responses import JSONResponse
 from services import firebaseAdmin
-from models.mongo import messages,uploads
-from utils.dataUtils import serializeMessage,serializeUpload
+from models.mongo import messages, uploads
+from utils.dataUtils import serializeMessage, serializeUpload
 from typing import Annotated, Union
 
 router = APIRouter()
@@ -14,7 +14,7 @@ async def verifyGoogleLogin(credentials: GoogleLoginSchema):
     tokenUid, name, email = firebaseAdmin.verifyJWTToken(credentials.token)
     chatHistory = serializeMessage(messages.getAllMessages(email=email))
     fileUploads = serializeUpload(uploads.getAllUploads(email=email))
-    
+
     if tokenUid == credentials.uid:
         response = JSONResponse(
             status_code=status.HTTP_200_OK,
@@ -22,7 +22,7 @@ async def verifyGoogleLogin(credentials: GoogleLoginSchema):
                 "status": status.HTTP_200_OK,
                 "message": "Token Valid!",
                 "chatHistory": chatHistory,
-                "fileUploads": fileUploads
+                "fileUploads": fileUploads,
             },
         )
         response.set_cookie(key="name", value=name)
@@ -54,14 +54,14 @@ async def verify(
         assert tokenUid != None
         chatHistory = serializeMessage(messages.getAllMessages(email=email))
         fileUploads = serializeUpload(uploads.getAllUploads(email=email))
-        
+
         response = JSONResponse(
             status_code=status.HTTP_200_OK,
             content={
                 "status": status.HTTP_200_OK,
                 "message": "Token Valid!",
                 "chatHistory": chatHistory,
-                "fileUploads": fileUploads
+                "fileUploads": fileUploads,
             },
         )
         return response

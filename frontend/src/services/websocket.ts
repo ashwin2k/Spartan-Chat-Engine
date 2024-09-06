@@ -1,6 +1,7 @@
 import React from 'react';
 import { Conversations } from '../types';
 import { MessageRole } from '../enums/MessageRole';
+import { RAGContext } from '../enums/RAGContext';
 
 export const createConnection = (
     setChatConversations: React.Dispatch<React.SetStateAction<Conversations>>,
@@ -20,7 +21,7 @@ export const createConnection = (
                 _id: (conversations.length + 1).toString(),
                 role: MessageRole.ASSISTANT,
                 message: newMessage,
-                isCurrentMessage:true
+                isCurrentMessage: true,
             },
         ]);
     };
@@ -41,6 +42,7 @@ export const sendMessage = (
     message: string,
     token: string,
     uid: string,
+    ragContext: RAGContext,
 ) => {
     const data = {
         message,
@@ -50,6 +52,7 @@ export const sendMessage = (
             token,
             uid,
         },
+        rag: ragContext,
     };
     socket.send(JSON.stringify(data));
 };
