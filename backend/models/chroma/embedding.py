@@ -12,8 +12,8 @@ def createDocument(x: str, name: str) -> Document:
 def addPdfdocs(extractedText: List[str], fileName: str, uid: str):
     embed_model = getEmbeddingModel()
     docs = [createDocument(text, fileName) for text in extractedText]
-    Settings.chunk_size = 128
-    Settings.chunk_overlap = 20
+    Settings.chunk_size = 512
+    Settings.chunk_overlap = 50
     vectorIndex = chroma.getVectorStoreIndex(uid)
     vectorIndex = vectorIndex.from_documents(
         docs,

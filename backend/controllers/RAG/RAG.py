@@ -6,8 +6,8 @@ from llama_index.core.retrievers import AutoMergingRetriever
 from utils.llm import getEmbeddingModel, getLLM
 from llama_index.core.retrievers import QueryFusionRetriever
 
-Settings.chunk_size = 128
-Settings.chunk_overlap = 20
+Settings.chunk_size = 512
+Settings.chunk_overlap = 50
 
 
 def loadDocuments(prompt: Message):
@@ -51,7 +51,7 @@ def getContextAugmentation(prompt: Message, uid: str):
 
     retriever = QueryFusionRetriever(
         retreivers,
-        similarity_top_k=5,
+        similarity_top_k=20,
         num_queries=4,  # set this to 1 to disable query generation
         mode="reciprocal_rerank",
         use_async=False,
