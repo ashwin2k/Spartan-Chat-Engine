@@ -8,13 +8,14 @@ export type User = {
 };
 
 export type Message = {
-    id: string;
+    _id: string;
     role: MessageRole;
     message: string;
     userInfo?: User;
-    timestamp?: Date
-    contentType?:[ContentType]
-    email?:string
+    timestamp?: string;
+    contentType?: [ContentType];
+    email?: string;
+    isCurrentMessage:boolean
 };
 export interface IChatUIProps {
     isQuerying: boolean;
@@ -31,10 +32,11 @@ export interface IChatInputProps {
     placeholder: string;
 }
 export interface ILoginResponse {
-    status:number
-    errors?:[string]
-    message?:string
-    chatHistory?:[Message]
+    status: number;
+    errors?: [string];
+    message?: string;
+    chatHistory?: [Message];
+    fileUploads?: [IFileMetaData];
 }
 export interface IChatConversationsProps {
     conversations: Conversations;
@@ -46,11 +48,23 @@ export interface IChatMessageProps {
     message: Message;
 }
 
+export interface IFileMetaData {
+    name: string;
+    text: [string];
+    email: string;
+    timestamp: Date;
+}
+
 export interface AuthContextType {
     isLoggedIn: boolean;
     setIsLoggedIn: (boolean) => void;
     chatConversations: Conversations;
-    setChatConversations: (boolean) => void;
+    uploadedFiles: Array<IFileMetaData>;
+    setUploadedFiles: (UploadedFiles) => void;
+    setChatConversations: (Conversations) => void;
+    socket: WebSocket | undefined;
+    setSocket: (WebSocket) => void;
 }
-export type Conversations = Array<Message>;
+export type UploadedFiles = Array<IFileMetaData>;
 
+export type Conversations = Array<Message>;

@@ -10,7 +10,8 @@ import { AuthContext } from '../contexts/AuthContext';
 
 export default function LoginModel() {
     const [loginProgress, setLoginProgress] = useState<number>(0);
-    const { setIsLoggedIn } = useContext(AuthContext);
+    const { setIsLoggedIn, setChatConversations, setUploadedFiles } =
+        useContext(AuthContext);
 
     return (
         <Modal
@@ -56,21 +57,40 @@ export default function LoginModel() {
                     <GoogleButton
                         onClick={async () => {
                             try {
-                                setLoginProgress(LoginFlow.POPUP)
-                                const loginResult = await signInWithGoogle();    
-                                setLoginProgress(LoginFlow.SUCCESS)
-                                setIsLoggedIn(true)
-
+                                setLoginProgress(LoginFlow.POPUP);
+                                const loginResult = await signInWithGoogle();
+                                setChatConversations(
+                                    loginResult?.chatHistory || [],
+                                );
+                                setLoginProgress(LoginFlow.SUCCESS);
+                                setUploadedFiles(
+                                    loginResult?.fileUploads || [],
+                                );
+                                setIsLoggedIn(true);
                             } catch (error) {
-                                setLoginProgress(LoginFlow.ERROR)
-                                console.error(error)
+                                setLoginProgress(LoginFlow.ERROR);
+                                console.error(error);
                             }
                         }}
                     />
-                    {loginProgress==LoginFlow.POPUP && <AlertBox text='Continue on the Google popup.' isOpen={(loginProgress==LoginFlow.POPUP)}/>}
-                    {loginProgress==LoginFlow.SUCCESS && <AlertBox text='Successfully logged In!' isOpen={(loginProgress==LoginFlow.SUCCESS)}/>}
-                    {loginProgress==LoginFlow.ERROR && <AlertBox text='Error logging in. Please try again.' isOpen={(loginProgress==LoginFlow.ERROR)}/>}
-
+                    {loginProgress == LoginFlow.POPUP && (
+                        <AlertBox
+                            text="Continue on the Google popup."
+                            isOpen={loginProgress == LoginFlow.POPUP}
+                        />
+                    )}
+                    {loginProgress == LoginFlow.SUCCESS && (
+                        <AlertBox
+                            text="Successfully logged In!"
+                            isOpen={loginProgress == LoginFlow.SUCCESS}
+                        />
+                    )}
+                    {loginProgress == LoginFlow.ERROR && (
+                        <AlertBox
+                            text="Error logging in. Please try again."
+                            isOpen={loginProgress == LoginFlow.ERROR}
+                        />
+                    )}
                 </div>
             </Sheet>
         </Modal>

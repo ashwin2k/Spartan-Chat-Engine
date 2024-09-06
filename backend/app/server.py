@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from views import chat, login
+from views import chat, login, file
 from fastapi.middleware.cors import CORSMiddleware
 from db import mongo  # initialize DB
 
@@ -7,6 +7,8 @@ app = FastAPI()
 
 app.include_router(chat.router)
 app.include_router(login.router, prefix="/login")
+app.include_router(file.router, prefix="/file")
+
 
 # Add CORS middleware
 app.add_middleware(

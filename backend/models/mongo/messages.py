@@ -27,4 +27,4 @@ class Message(Document):
 
 def getAllMessages(email: str):
     messages = Message.objects(email=email)
-    return messages.to_json()
+    return [message.to_mongo().to_dict() for message in messages]

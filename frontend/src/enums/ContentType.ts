@@ -1,4 +1,4 @@
 export enum ContentType {
-    TEXT = "text",
-    FILE = "file"
+    TEXT = 'text',
+    FILE = 'file',
 }

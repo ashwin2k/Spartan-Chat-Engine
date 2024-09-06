@@ -23,7 +23,7 @@ export const ChatConversations = ({
             {conversations &&
                 conversations.map((chatEntry) => (
                     <ChatMessage
-                        key={`chatbot-message-${chatEntry.id}`}
+                        key={`chatbot-message-${chatEntry._id}`}
                         message={chatEntry}
                     />
                 ))}

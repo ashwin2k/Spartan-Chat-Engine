@@ -11,4 +11,5 @@ def verifyJWTToken(token: str) -> Union[str, None]:
         decoded_token = auth.verify_id_token(token)
         return decoded_token["uid"], decoded_token["name"], decoded_token["email"]
     except Exception as e:
+        print(e)
         return None, None, None

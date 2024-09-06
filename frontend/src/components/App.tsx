@@ -1,40 +1,67 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { MessageRole } from '../enums/MessageRole';
-import { Conversations } from '../types';
+import { Conversations, ILoginResponse, UploadedFiles } from '../types';
 import { ChatUI } from './Chat/ChatUI';
 import { AuthContext } from '../contexts/AuthContext';
+import { reLogin } from '../services/http';
+import Cookies from 'js-cookie';
+import { createConnection, sendMessage } from '../services/websocket';
 function App() {
     const [isQuerying, setIsQuerying] = useState<boolean>(false);
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-    const [chatConversations, setChatConversations] = useState<Conversations>([]);
-
-    const handleSubmit = useCallback((value: string) => {
+    const [chatConversations, setChatConversations] = useState<Conversations>(
+        [],
+    );
+    const [socket, setSocket] = useState<WebSocket>();
+    const [uploadedFiles, setUploadedFiles] = useState<UploadedFiles>([]);
+    const handleSubmit = (value: string) => {
         setIsQuerying(true);
         setChatConversations((conversations) => [
             ...conversations,
             {
-                userInfo: { firstName: 'Ash', lastName: 'Win' },
-                id: (conversations.length + 1).toString(),
+                _id: (conversations.length + 1).toString(),
                 role: MessageRole.USER,
                 message: value,
+                isCurrentMessage:false
             },
         ]);
-        setTimeout(() => {
-            setIsQuerying(false);
-            setChatConversations((conversations) => [
-                ...conversations,
-                {
-                    id: (conversations.length + 1).toString(),
-                    role: MessageRole.ASSISTANT,
-                    message:
-                        'This is a mocked sample chat bot assistant response',
-                },
-            ]);
-        }, 3000);
+        if (socket)
+            sendMessage(
+                socket,
+                value,
+                Cookies.get('token') || '',
+                Cookies.get('uid') || '',
+            );
+    };
+
+    useEffect(() => {
+        reLogin().then((loginResult: ILoginResponse) => {
+            if (loginResult.status === 200) {
+                setChatConversations(loginResult.chatHistory || []);
+                setIsLoggedIn(true);
+                setUploadedFiles(loginResult?.fileUploads || []);
+            }
+        });
+        const socketConnection = createConnection(
+            setChatConversations,
+            setIsQuerying,
+        );
+        setSocket(socketConnection);
     }, []);
 
     return (
-        <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn,chatConversations,setChatConversations }}>
+        <AuthContext.Provider
+            value={{
+                isLoggedIn,
+                setIsLoggedIn,
+                chatConversations,
+                setChatConversations,
+                uploadedFiles,
+                setUploadedFiles,
+                socket,
+                setSocket,
+            }}
+        >
             <ChatUI
                 isQuerying={isQuerying}
                 placeholder="Type here to interact with this demo"

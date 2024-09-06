@@ -11,7 +11,7 @@ class MessageType(str, Enum):
 
 class UserType(str, Enum):
     USER = "user"
-    AI = "ai"
+    AI = "assistant"
 
 
 class GoogleLoginSchema(BaseModel):
@@ -21,10 +21,10 @@ class GoogleLoginSchema(BaseModel):
 
 class Message(BaseModel):
     contentType: MessageType
-    userType: UserType
+    role: UserType
     timestamp: datetime = Field(default_factory=datetime.utcnow)
     message: str
-    metaData: Optional[GoogleLoginSchema] = {}
+    metaData: GoogleLoginSchema
 
 
 class DDGWebSearchResult:
