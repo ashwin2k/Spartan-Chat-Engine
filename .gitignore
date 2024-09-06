@@ -5,3 +5,4 @@ __pycache__
 vectors/*
 serviceAccountKey.json
 .env
+*/logs/*

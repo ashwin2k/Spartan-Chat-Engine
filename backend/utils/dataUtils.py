@@ -9,7 +9,7 @@ def serializeMessage(data_list):
         elif isinstance(obj, datetime):
             return obj.isoformat()
         else:
-            raise TypeError(f"Type {type(obj)} not serializable")
+            return ""
 
     return [
         {
@@ -32,7 +32,7 @@ def serializeUpload(data_list):
         elif isinstance(obj, datetime):
             return obj.isoformat()
         else:
-            raise TypeError(f"Type {type(obj)} not serializable")
+            return ""
 
     return [
         {

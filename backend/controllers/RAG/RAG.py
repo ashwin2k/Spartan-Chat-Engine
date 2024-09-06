@@ -25,6 +25,7 @@ def getContextAugmentation(prompt: Message, uid: str):
     vectorIndex = chroma.getVectorStoreIndex(uid)
 
     if prompt.rag == RAGSystemType.WEB:
+        # Dont load/store locally
         documents = loadDocuments(prompt)
         vectorIndex = vectorIndex.from_documents(
             documents,
@@ -38,21 +39,21 @@ def getContextAugmentation(prompt: Message, uid: str):
         )
 
     queryBundle = QueryBundle(prompt.message)
+    # Basic Vector retreiver
     baseRetriever = vectorIndex.as_retriever(similarity_top_k=5)
-    autoMergingRetriever = AutoMergingRetriever(
-        baseRetriever,
-        chroma.getStorageContext(uid),
-        verbose=False,
-    )
-
     retreivers = [baseRetriever]
     if prompt.rag == RAGSystemType.FILE:
+        autoMergingRetriever = AutoMergingRetriever(
+            baseRetriever,
+            chroma.getStorageContext(uid),
+            verbose=False,
+        )
         retreivers.append(autoMergingRetriever)
-
+    # Perform Rag fusion + Rerank
     retriever = QueryFusionRetriever(
         retreivers,
         similarity_top_k=20,
-        num_queries=4,  # set this to 1 to disable query generation
+        num_queries=4, 
         mode="reciprocal_rerank",
         use_async=False,
         verbose=False,
