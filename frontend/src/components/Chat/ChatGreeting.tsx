@@ -9,8 +9,8 @@ export function ChatGreeting() {
             <Typography textAlign={'center'} level="h1">
                 Greetings, Soldier. Welcome to the Spartan simulator.
             </Typography>
-            <Typography textAlign={'center'} level="body-md">
-                Ask me <i>Anything.</i> I will do my best!
+            <Typography className="pt-4" textAlign={'center'} level="body-md">
+                Ask me <b><i>Anything.</i></b> I will do my best!
             </Typography>
         </Box>
     );

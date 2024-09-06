@@ -28,7 +28,6 @@ export const createConnection = (
 
     socket.onclose = () => {
         console.log('WebSocket disconnected');
-        window.location.reload();
     };
 
     socket.onerror = (error) => {
