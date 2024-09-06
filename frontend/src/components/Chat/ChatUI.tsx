@@ -15,8 +15,7 @@ export const ChatUI = ({
     onSubmit,
 }: IChatUIProps) => {
     const chatConversationsContainerRef = useRef<HTMLDivElement>(null);
-    const { isLoggedIn, chatConversations } =
-        useContext(AuthContext);
+    const { isLoggedIn, chatConversations } = useContext(AuthContext);
     return (
         <div className="flex flex-row w-full overflow-y-hidden">
             <FileUploadSideBar />
@@ -36,7 +35,7 @@ export const ChatUI = ({
                             chatConversationsContainerRef
                         }
                     />
-                    <div className="absolute bottom-12 w-4/5">
+                    <div className="absolute ml-40 bottom-12 w-4/5">
                         <ChatInput
                             disabled={disabled}
                             onSubmit={onSubmit}

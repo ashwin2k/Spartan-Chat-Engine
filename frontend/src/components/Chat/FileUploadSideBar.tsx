@@ -25,6 +25,7 @@ export function FileUploadSideBar() {
                     Files
                 </Typography>
             </Box>
+
             {uploadedFiles.map((file) => (
                 <FileTile
                     name={file.name}

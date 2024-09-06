@@ -4,12 +4,13 @@ import {
     faUpload,
 } from '@fortawesome/free-solid-svg-icons';
 import { useCallback, useContext, useRef } from 'react';
-import { IChatInputProps } from '../../types';
+import { IChatInputProps, IFileMetaData } from '../../types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconButton, Textarea } from '@mui/joy';
 import { AuthContext } from '../../contexts/AuthContext';
 import { RAGContext } from '../../enums/RAGContext';
 import { AlertBox } from '../Utils/Alert';
+import { uploadFile } from '../../services/http';
 export const ChatInput = ({
     disabled,
     onSubmit,
@@ -37,10 +38,20 @@ export const ChatInput = ({
     const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
-            console.log('Selected file:', file, typeof file);
+            console.log(
+                'Selected file:',
+                file,
+                new Date(file.lastModified).toISOString(),
+            );
+            uploadFile(file)
+                .then((res) => console.log('Uploaded file!', res))
+                .catch((err) => console.error(err));
             setUploadedFiles([
                 ...uploadedFiles,
-                { name: file.name, lastModified: new Date(file.lastModified) },
+                {
+                    name: file.name,
+                    timestamp: new Date(file.lastModified).toISOString(),
+                } as IFileMetaData,
             ]);
         }
     };

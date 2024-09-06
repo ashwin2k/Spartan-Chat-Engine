@@ -51,9 +51,9 @@ export interface IChatMessageProps {
 
 export interface IFileMetaData {
     name: string;
-    text: [string];
-    email: string;
-    timestamp: Date;
+    text?: [string];
+    email?: string;
+    timestamp: string;
 }
 
 export interface AuthContextType {

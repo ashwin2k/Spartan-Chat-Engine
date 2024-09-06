@@ -5,7 +5,23 @@ const apiClient: AxiosInstance = axios.create({
     baseURL: 'http://localhost:8000',
     withCredentials: true,
 });
-
+export async function uploadFile(file: File) {
+    const formData = new FormData();
+    formData.append('file', file);
+    try {
+        const response: AxiosResponse = await apiClient.post(
+            'file/upload',
+            formData,
+        );
+        const responseData: ILoginResponse = response.data;
+        return responseData;
+    } catch (error) {
+        return {
+            status: 500,
+            errors: ['Internal Server Error'],
+        } as ILoginResponse;
+    }
+}
 export async function login({ token, uid }: { token: String; uid: String }) {
     const requestBody = {
         token,
