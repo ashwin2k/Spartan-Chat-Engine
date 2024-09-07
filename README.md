@@ -2,6 +2,11 @@
 
 A Chatbot built using LLamaindex that simulates a intelligent Spartan WARRIOR!
 
+## Bug Fixes:
+
+- Fixed an UI Bug where chat list wont take full h
+  eight
+
 ### PreRequisites:
 
 > Make sure you have MongoDB installed! https://www.mongodb.com/docs/manual/installation/
