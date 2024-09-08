@@ -57,7 +57,7 @@ npm start
 - One click OAuth login with Google1
   ![alt text](assets/image-3.png)
 - FastAPI backend with Streaming APIs
-- LLama 3.1 integration using Ollama and LangChain
+- LLama 3.1 integration using Ollama and Llamaindex
 - RAG Fusion ( https://arxiv.org/abs/2402.03367) - Further improve relevant document/chunk retrieved.
 - WebSearch Integration (powered by DuckDuckGo) - Obtain information from the web about a particular question.
 - RAG Re-Ranking - Further refinement for relevance in context
